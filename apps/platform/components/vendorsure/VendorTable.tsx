@@ -1,3 +1,4 @@
+import Link from "next/link";
 import RiskBadge from "./RiskBadge";
 type VendorTableProps = {
   vendors: {
@@ -106,7 +107,14 @@ export default function VendorTable({
               key={vendor.id}
               className="border-t hover:bg-gray-50"
             >
-              <td className="px-6 py-4">{vendor.name}</td>
+              <td className="px-6 py-4">
+  <Link
+    href={`/vendorsure/vendor/${vendor.id}`}
+    className="font-medium text-blue-600 hover:underline"
+  >
+    {vendor.name}
+  </Link>
+</td>
               <td className="px-6 py-4">{vendor.customer}</td>
               <td className="px-6 py-4">{vendor.category}</td>
               <td className="px-6 py-4">
