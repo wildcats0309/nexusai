@@ -1,5 +1,6 @@
 import ExecutiveHeader from "./ExecutiveHeader";
 import ExecutiveKpis from "./ExecutiveKpis";
+import RiskOverview from "./RiskOverview";
 
 export default function ExecutiveDashboard() {
   return (
@@ -7,6 +8,8 @@ export default function ExecutiveDashboard() {
       <ExecutiveHeader />
 
       <ExecutiveKpis />
+
+      <RiskOverview />
     </div>
   );
 }
