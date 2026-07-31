@@ -1,6 +1,7 @@
 import ExecutiveHeader from "./ExecutiveHeader";
 import ExecutiveKpis from "./ExecutiveKpis";
 import RiskOverview from "./RiskOverview";
+import RecentActivity from "./RecentActivity";
 
 export default function ExecutiveDashboard() {
   return (
@@ -9,7 +10,11 @@ export default function ExecutiveDashboard() {
 
       <ExecutiveKpis />
 
-      <RiskOverview />
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
+        <RiskOverview />
+
+        <RecentActivity />
+      </div>
     </div>
   );
 }
