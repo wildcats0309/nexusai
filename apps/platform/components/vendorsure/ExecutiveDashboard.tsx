@@ -2,6 +2,7 @@ import ExecutiveHeader from "./ExecutiveHeader";
 import ExecutiveKpis from "./ExecutiveKpis";
 import RiskOverview from "./RiskOverview";
 import RecentActivity from "./RecentActivity";
+import QuickActions from "./QuickActions";
 
 export default function ExecutiveDashboard() {
   return (
@@ -15,6 +16,8 @@ export default function ExecutiveDashboard() {
 
         <RecentActivity />
       </div>
+
+      <QuickActions />
     </div>
   );
 }
