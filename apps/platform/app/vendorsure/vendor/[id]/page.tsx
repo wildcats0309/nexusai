@@ -4,6 +4,9 @@ import VendorProfileHeader from "@/components/vendorsure/VendorProfileHeader";
 import { vendors } from "@/lib/mock-data/vendors";
 import PrimaryContactCard from "@/components/vendorsure/PrimaryContactCard";
 import QualificationStatusCard from "@/components/vendorsure/QualificationStatusCard";
+import DocumentsCard from "@/components/vendorsure/DocumentsCard";
+import RequirementsMatrixCard from "@/components/vendorsure/RequirementsMatrixCard";
+import CapaCard from "@/components/vendorsure/CapaCard";
 type Props = {
   params: Promise<{
     id: string;
@@ -45,6 +48,10 @@ export default async function VendorDetailsPage({
 
   <QualificationStatusCard vendor={vendor} />
 </div>
+
+<DocumentsCard vendor={vendor} />
+<RequirementsMatrixCard />
+<CapaCard vendor={vendor} />
     </div>
   );
 }
