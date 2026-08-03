@@ -3,6 +3,7 @@ import Link from "next/link";
 import VendorProfileHeader from "@/components/vendorsure/VendorProfileHeader";
 import { vendors } from "@/lib/mock-data/vendors";
 import PrimaryContactCard from "@/components/vendorsure/PrimaryContactCard";
+import QualificationStatusCard from "@/components/vendorsure/QualificationStatusCard";
 type Props = {
   params: Promise<{
     id: string;
@@ -41,6 +42,8 @@ export default async function VendorDetailsPage({
 
 <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
   <PrimaryContactCard vendor={vendor} />
+
+  <QualificationStatusCard vendor={vendor} />
 </div>
     </div>
   );
