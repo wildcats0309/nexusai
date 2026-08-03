@@ -1,28 +1,47 @@
 import Link from "next/link";
 
+import VendorProfileHeader from "@/components/vendorsure/VendorProfileHeader";
+import { vendors } from "@/lib/mock-data/vendors";
+import PrimaryContactCard from "@/components/vendorsure/PrimaryContactCard";
 type Props = {
   params: Promise<{
     id: string;
   }>;
 };
 
-export default async function VendorDetailsPage({ params }: Props) {
+export default async function VendorDetailsPage({
+  params,
+}: Props) {
   const { id } = await params;
 
+  const vendor = vendors.find(
+    (vendor) => vendor.id === Number(id)
+  );
+
+  if (!vendor) {
+    return (
+      <div className="p-8">
+        <h1 className="text-2xl font-bold">
+          Vendor not found
+        </h1>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-8">
+    <div className="space-y-8 p-8">
       <Link
         href="/vendorsure"
         className="text-blue-600 hover:underline"
       >
-        ← Back to Vendor Dashboard
+        ← Back to Vendor Management
       </Link>
 
-      <h1 className="mt-6 text-3xl font-bold">
-        Vendor Details
-      </h1>
+      <VendorProfileHeader vendor={vendor} />
 
-      <p className="mt-4">Vendor ID: {id}</p>
+<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+  <PrimaryContactCard vendor={vendor} />
+</div>
     </div>
   );
 }
