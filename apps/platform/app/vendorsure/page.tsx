@@ -6,7 +6,7 @@ import DashboardHeader from "@/components/vendorsure/DashboardHeader";
 import StatCard from "@/components/vendorsure/StatCard";
 import VendorTable from "@/components/vendorsure/VendorTable";
 import AddVendorModal from "@/components/vendorsure/AddVendorModal";
-
+import EditVendorModal from "@/components/vendorsure/EditVendorModal";
 import { dashboardStats } from "@/lib/mock-data/dashboard";
 import { vendors } from "@/lib/mock-data/vendors";
 import { Vendor } from "@/lib/types/vendor";
@@ -22,8 +22,12 @@ type SortColumn =
 export default function VendorSurePage() {
   // State
   const [vendorList, setVendorList] = useState(vendors);
+  
   const [showAddVendor, setShowAddVendor] = useState(false);
-
+  const [showEditVendor, setShowEditVendor] = useState(false);
+  
+  const [selectedVendor, setSelectedVendor] =
+  useState<Vendor | null>(null);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -49,6 +53,11 @@ export default function VendorSurePage() {
     ...prevVendors,
     newVendor,
   ]);
+};
+
+const handleEditVendor = (vendor: Vendor) => {
+  setSelectedVendor(vendor);
+  setShowEditVendor(true);
 };
 
   // Configuration
@@ -103,6 +112,7 @@ export default function VendorSurePage() {
     }
   };
 
+
   return (
     <div className="p-8">
       <DashboardHeader
@@ -133,11 +143,12 @@ export default function VendorSurePage() {
       </div>
 
       <VendorTable
-        vendors={paginatedVendors}
-        onSort={handleSort}
-        sortColumn={sortColumn}
-        sortDirection={sortDirection}
-      />
+  vendors={paginatedVendors}
+  onEdit={handleEditVendor}
+  onSort={handleSort}
+  sortColumn={sortColumn}
+  sortDirection={sortDirection}
+/>
 
       <div className="mt-4 flex items-center justify-between">
         <button
@@ -166,6 +177,14 @@ export default function VendorSurePage() {
   onClose={() => setShowAddVendor(false)}
   onSave={handleAddVendor}
 />
+
+<EditVendorModal
+  open={showEditVendor}
+  selectedVendor={selectedVendor}
+  onClose={() => setShowEditVendor(false)}
+  onSave={() => {}}
+/>
+
     </div>
   );
 }

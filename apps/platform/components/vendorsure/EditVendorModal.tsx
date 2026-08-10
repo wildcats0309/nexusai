@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import VendorForm from "./VendorForm";
+import type { Vendor } from "@/lib/types/vendor";
 
 type Props = {
   open: boolean;
+  selectedVendor: Vendor | null;
   onClose: () => void;
-  onSave: (newVendor: {
+  onSave: (updatedVendor: {
     id: number;
     name: string;
     customer: string;
@@ -17,28 +20,41 @@ type Props = {
   }) => void;
 };
 
-export default function AddVendorModal({
+export default function EditVendorModal({
   open,
+  selectedVendor,
   onClose,
   onSave,
 }: Props) {
   const [vendor, setVendor] = useState({
-  name: "",
-  customer: "",
-  category: "",
-  risk: "Low",
-  status: "Approved",
-});
-
-  const resetForm = () => {
-  setVendor({
     name: "",
     customer: "",
     category: "",
     risk: "Low",
     status: "Approved",
   });
-};
+
+  useEffect(() => {
+  if (selectedVendor) {
+    setVendor({
+      name: selectedVendor.name,
+      customer: selectedVendor.customer,
+      category: selectedVendor.category,
+      risk: selectedVendor.risk,
+      status: selectedVendor.status,
+    });
+  }
+}, [selectedVendor]);
+
+  const resetForm = () => {
+    setVendor({
+      name: "",
+      customer: "",
+      category: "",
+      risk: "Low",
+      status: "Approved",
+    });
+  };
 
   const handleSave = () => {
     if (!vendor.name.trim()) {
@@ -52,21 +68,21 @@ export default function AddVendorModal({
       year: "numeric",
     });
 
-    const newVendor = {
-  id: Date.now(),
-  name: vendor.name,
-  customer: vendor.customer,
-  category: vendor.category,
-  risk: vendor.risk,
-  status: vendor.status,
-  lastReview: today,
-};
+    const updatedVendor = {
+      id: selectedVendor?.id ?? Date.now(),
+      name: vendor.name,
+      customer: vendor.customer,
+      category: vendor.category,
+      risk: vendor.risk,
+      status: vendor.status,
+      lastReview: today,
+    };
 
-    onSave(newVendor);
+    onSave(updatedVendor);
 
     resetForm();
 
-    alert("Vendor added successfully!");
+    alert("Vendor updated successfully!");
 
     onClose();
   };
@@ -81,16 +97,16 @@ export default function AddVendorModal({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-lg rounded-xl bg-white p-8 shadow-xl">
-        <h2 className="text-2xl font-bold">Add Vendor</h2>
+        <h2 className="text-2xl font-bold">Edit Vendor</h2>
 
         <p className="mt-2 text-gray-500">
-          Register a new supplier.
+          Update supplier information.
         </p>
 
         <VendorForm
-  vendor={vendor}
-  setVendor={setVendor}
-/>
+          vendor={vendor}
+          setVendor={setVendor}
+        />
 
         <div className="mt-8 flex justify-end gap-3">
           <button
@@ -104,7 +120,7 @@ export default function AddVendorModal({
             onClick={handleSave}
             className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
-            Save Vendor
+            Save Changes
           </button>
         </div>
       </div>
