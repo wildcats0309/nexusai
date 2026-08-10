@@ -1,5 +1,6 @@
 import { Vendor } from "@/lib/types/vendor";
 import { FileText, Upload } from "lucide-react";
+
 type Props = {
   vendor: Vendor;
 };
@@ -15,9 +16,9 @@ export default function DocumentsCard({
         </h2>
 
         <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
-  <Upload size={16} />
-  Upload
-</button>
+          <Upload size={16} />
+          Upload
+        </button>
       </div>
 
       <div className="mt-6">
@@ -29,9 +30,9 @@ export default function DocumentsCard({
                 className="flex items-center justify-between rounded-lg border p-4 hover:bg-gray-50"
               >
                 <span className="flex items-center gap-2">
-  <FileText size={18} />
-  {document}
-</span>
+                  <FileText size={18} />
+                  {document}
+                </span>
 
                 <button className="text-sm font-medium text-blue-600 hover:underline">
                   View

@@ -5,12 +5,13 @@ import { useState } from "react";
 import DashboardHeader from "@/components/vendorsure/DashboardHeader";
 import StatCard from "@/components/vendorsure/StatCard";
 import VendorTable from "@/components/vendorsure/VendorTable";
+import AddVendorModal from "@/components/vendorsure/AddVendorModal";
 
 import { dashboardStats } from "@/lib/mock-data/dashboard";
 import { vendors } from "@/lib/mock-data/vendors";
+import { Vendor } from "@/lib/types/vendor";
 
-
-  type SortColumn =
+type SortColumn =
   | "name"
   | "customer"
   | "category"
@@ -20,28 +21,41 @@ import { vendors } from "@/lib/mock-data/vendors";
 
 export default function VendorSurePage() {
   // State
-  const [search, setSearch] = useState("");
-const [currentPage, setCurrentPage] = useState(1);
-const handleSort = (column: SortColumn) => {
-  if (column === sortColumn) {
-    setSortDirection(
-      sortDirection === "asc" ? "desc" : "asc"
-    );
-  } else {
-    setSortColumn(column);
-    setSortDirection("asc");
-  }
-};
-const [sortColumn, setSortColumn] = useState<SortColumn>("name");
-const [sortDirection, setSortDirection] =
-  useState<"asc" | "desc">("asc");
+  const [vendorList, setVendorList] = useState(vendors);
+  const [showAddVendor, setShowAddVendor] = useState(false);
 
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [sortColumn, setSortColumn] =
+    useState<SortColumn>("name");
+
+  const [sortDirection, setSortDirection] =
+    useState<"asc" | "desc">("asc");
+
+  const handleSort = (column: SortColumn) => {
+    if (column === sortColumn) {
+      setSortDirection(
+        sortDirection === "asc" ? "desc" : "asc"
+      );
+    } else {
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+ const handleAddVendor = (newVendor: Vendor) => {
+  setVendorList((prevVendors) => [
+    ...prevVendors,
+    newVendor,
+  ]);
+};
 
   // Configuration
   const vendorsPerPage = 10;
 
   // Filter vendors
-  const filteredVendors = vendors.filter((vendor) => {
+  const filteredVendors = vendorList.filter((vendor) => {
     const term = search.trim().toLowerCase();
 
     return (
@@ -51,19 +65,26 @@ const [sortDirection, setSortDirection] =
     );
   });
 
+  // Sort vendors
   const sortedVendors = [...filteredVendors].sort((a, b) => {
-  const comparison = a[sortColumn].localeCompare(b[sortColumn]);
+    const comparison =
+      a[sortColumn].localeCompare(b[sortColumn]);
 
-  return sortDirection === "asc"
-    ? comparison
-    : -comparison;
-});
+    return sortDirection === "asc"
+      ? comparison
+      : -comparison;
+  });
 
   // Pagination
-  const startIndex = (currentPage - 1) * vendorsPerPage;
+  const startIndex =
+    (currentPage - 1) * vendorsPerPage;
+
   const endIndex = startIndex + vendorsPerPage;
 
-  const paginatedVendors = sortedVendors.slice(startIndex, endIndex);
+  const paginatedVendors = sortedVendors.slice(
+    startIndex,
+    endIndex
+  );
 
   const totalPages = Math.ceil(
     filteredVendors.length / vendorsPerPage
@@ -81,12 +102,12 @@ const [sortDirection, setSortDirection] =
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
-console.log("sortColumn:", sortColumn);
-console.log("sortDirection:", sortDirection);
 
   return (
     <div className="p-8">
-      <DashboardHeader />
+      <DashboardHeader
+  onAddVendor={() => setShowAddVendor(true)}
+/>
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         {dashboardStats.map((stat) => (
@@ -112,11 +133,11 @@ console.log("sortDirection:", sortDirection);
       </div>
 
       <VendorTable
-  vendors={paginatedVendors}
-  onSort={handleSort}
-  sortColumn={sortColumn}
-  sortDirection={sortDirection}
-/>
+        vendors={paginatedVendors}
+        onSort={handleSort}
+        sortColumn={sortColumn}
+        sortDirection={sortDirection}
+      />
 
       <div className="mt-4 flex items-center justify-between">
         <button
@@ -139,6 +160,12 @@ console.log("sortDirection:", sortDirection);
           Next
         </button>
       </div>
+
+      <AddVendorModal
+  open={showAddVendor}
+  onClose={() => setShowAddVendor(false)}
+  onSave={handleAddVendor}
+/>
     </div>
   );
 }
