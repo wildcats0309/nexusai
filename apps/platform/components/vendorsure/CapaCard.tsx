@@ -1,5 +1,12 @@
 import { Vendor } from "@/lib/types/vendor";
 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
+
 type Props = {
   vendor: Vendor;
 };
@@ -8,12 +15,14 @@ export default function CapaCard({
   vendor,
 }: Props) {
   return (
-    <div className="rounded-xl border bg-white p-6 shadow-sm">
-      <h2 className="text-xl font-semibold">
-        Corrective & Preventive Actions (CAPAs)
-      </h2>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          Corrective & Preventive Actions (CAPAs)
+        </CardTitle>
+      </CardHeader>
 
-      <div className="mt-6">
+      <CardContent>
         {vendor.capas?.length ? (
           <div className="space-y-4">
             {vendor.capas.map((capa) => (
@@ -31,18 +40,18 @@ export default function CapaCard({
                   </span>
                 </div>
 
-                <p className="mt-3 text-gray-600">
+                <p className="mt-3 text-muted-foreground">
                   Priority: {capa.priority}
                 </p>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             No CAPAs available.
           </p>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
