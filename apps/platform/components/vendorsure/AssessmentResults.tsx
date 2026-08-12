@@ -1,15 +1,18 @@
 import { AssessmentResult } from "@/lib/assessment/calculateRisk";
 import { EvidenceItem } from "@/lib/assessment/requiredEvidence";
+import { QualificationDecision } from "@/lib/assessment/getQualificationDecision";
 
 type Props = {
   result: AssessmentResult;
   evidence: EvidenceItem[];
+  decision: QualificationDecision;
   onClose: () => void;
 };
 
 export default function AssessmentResults({
   result,
   evidence,
+  decision,
   onClose,
 }: Props) {
   const badgeColor =
@@ -19,13 +22,22 @@ export default function AssessmentResults({
       ? "bg-yellow-100 text-yellow-700"
       : "bg-red-100 text-red-700";
 
+  const decisionColor =
+    decision.status === "Ready"
+      ? "bg-green-100 text-green-700"
+      : decision.status === "Needs Review"
+      ? "bg-yellow-100 text-yellow-700"
+      : "bg-red-100 text-red-700";
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-3xl rounded-xl bg-white p-8 shadow-xl">
+      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
 
         <h2 className="text-3xl font-bold">
           Vendor Assessment Results
         </h2>
+
+        {/* Overall Risk */}
 
         <div className="mt-8 flex items-center justify-between">
 
@@ -40,62 +52,128 @@ export default function AssessmentResults({
           </div>
 
           <div
-            className={`rounded-full px-5 py-2 text-lg font-semibold ${badgeColor}`}
+            className={`rounded-full px-4 py-2 text-base font-semibold ${badgeColor}`}
           >
             {result.riskLevel} Risk
           </div>
 
         </div>
 
-        <div className="mt-10">
+        {/* Risk Breakdown */}
+
+        <div className="mt-6">
 
           <h3 className="text-xl font-semibold">
-            Recommendations
+            Risk Breakdown
           </h3>
 
-          {result.recommendations.length ? (
-            <ul className="mt-4 space-y-3">
-              {result.recommendations.map((recommendation) => (
-                <li
-                  key={recommendation}
-                  className="rounded-lg border p-4"
+          <div className="mt-4 space-y-3">
+
+            {Object.entries(result.categoryScores).map(
+              ([category, score]) => (
+                <div
+                  key={category}
+                  className="flex justify-between rounded-lg border p-4"
                 >
-                  ✓ {recommendation}
-                </li>
+                  <span>{category}</span>
+
+                  <span className="font-semibold">
+                    {score}
+                  </span>
+                </div>
+              )
+            )}
+
+          </div>
+
+        </div>
+
+        {/* Required Evidence */}
+
+        <div className="mt-6">
+
+          <h3 className="text-xl font-semibold">
+            Required Evidence
+          </h3>
+
+          {evidence.length ? (
+            <div className="mt-4 space-y-3">
+
+              {evidence.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between rounded-lg border p-4"
+                >
+                  <span>{item.name}</span>
+
+                  <span className="rounded-full bg-red-100 px-3 py-1 text-sm text-red-700">
+                    Missing
+                  </span>
+                </div>
               ))}
-            </ul>
+
+            </div>
           ) : (
             <p className="mt-4 text-gray-500">
-              No recommendations.
+              No additional evidence required.
             </p>
           )}
 
         </div>
 
-        <div className="mt-10">
-  <h3 className="text-xl font-semibold">
-    Required Evidence
-  </h3>
+        {/* Qualification Decision */}
 
-  {evidence.length ? (
-    <ul className="mt-4 space-y-3">
-      {evidence.map((item) => (
-        <li
-          key={item.id}
-          className="rounded-lg border p-4"
-        >
-          ☐ {item.name}
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p className="mt-4 text-gray-500">
-      No additional evidence required.
-    </p>
-  )}
-</div>
+        <div className="mt-6">
 
-        <div className="mt-10 flex justify-end">
+          <h3 className="text-xl font-semibold">
+            Qualification Decision
+          </h3>
+
+          <div
+            className={`mt-4 rounded-xl p-5 ${decisionColor}`}
+          >
+            <p className="text-2xl font-bold">
+              {decision.status}
+            </p>
+
+            <ul className="mt-4 space-y-2">
+
+              {decision.reasons.map((reason) => (
+                <li key={reason}>
+                  • {reason}
+                </li>
+              ))}
+
+            </ul>
+
+          </div>
+
+        </div>
+
+        {/* Next Steps */}
+
+        <div className="mt-6">
+
+          <h3 className="text-xl font-semibold">
+            Recommended Next Steps
+          </h3>
+
+          <ul className="mt-4 space-y-3">
+
+            {decision.nextSteps.map((step) => (
+              <li
+                key={step}
+                className="rounded-lg border p-3"
+              >
+                ✓ {step}
+              </li>
+            ))}
+
+          </ul>
+
+        </div>
+
+        <div className="mt-6 flex justify-end">
 
           <button
             onClick={onClose}

@@ -1,4 +1,5 @@
 "use client";
+import { getQualificationDecision } from "@/lib/assessment/getQualificationDecision";
 import { calculateRisk } from "@/lib/assessment/calculateRisk";
 import { getRequiredEvidence } from "@/lib/assessment/getRequiredEvidence";
 import AssessmentResults from "./AssessmentResults";
@@ -31,6 +32,12 @@ export default function VendorWorkspace({
 const [requiredEvidence, setRequiredEvidence] = useState<
   ReturnType<typeof getRequiredEvidence>
 >([]);
+
+const [qualificationDecision, setQualificationDecision] =
+  useState<ReturnType<
+    typeof getQualificationDecision
+  > | null>(null);
+
   return (
     <>
       <VendorProfileHeader
@@ -83,11 +90,16 @@ const [requiredEvidence, setRequiredEvidence] = useState<
   console.log("Assessment complete");
   console.log(answers);
 
-  const result = calculateRisk(answers);
-  const evidence = getRequiredEvidence(answers);
+ const result = calculateRisk(answers);
+const evidence = getRequiredEvidence(answers);
+const decision = getQualificationDecision(
+  result,
+  evidence
+);
 
 setAssessmentResult(result);
 setRequiredEvidence(evidence);
+setQualificationDecision(decision);
 
 setShowAssessment(false);
 setShowResults(true);
@@ -98,10 +110,12 @@ setShowResults(true);
   <AssessmentResults
   result={assessmentResult}
   evidence={requiredEvidence}
+  decision={qualificationDecision!}
   onClose={() => {
     setShowResults(false);
     setAssessmentResult(null);
     setRequiredEvidence([]);
+    setQualificationDecision(null);
   }}
 />
 )}
