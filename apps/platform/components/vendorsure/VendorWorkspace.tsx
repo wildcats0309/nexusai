@@ -1,5 +1,6 @@
 "use client";
 import { calculateRisk } from "@/lib/assessment/calculateRisk";
+import { getRequiredEvidence } from "@/lib/assessment/getRequiredEvidence";
 import AssessmentResults from "./AssessmentResults";
 import { useState } from "react";
 
@@ -27,6 +28,9 @@ export default function VendorWorkspace({
   const [assessmentResult, setAssessmentResult] = useState<
   ReturnType<typeof calculateRisk> | null
 >(null);
+const [requiredEvidence, setRequiredEvidence] = useState<
+  ReturnType<typeof getRequiredEvidence>
+>([]);
   return (
     <>
       <VendorProfileHeader
@@ -80,23 +84,26 @@ export default function VendorWorkspace({
   console.log(answers);
 
   const result = calculateRisk(answers);
+  const evidence = getRequiredEvidence(answers);
 
-  console.log(result);
+setAssessmentResult(result);
+setRequiredEvidence(evidence);
 
-  setAssessmentResult(result);
-  setShowAssessment(false);
-  setShowResults(true);
+setShowAssessment(false);
+setShowResults(true);
 }}
 />
 
 {showResults && assessmentResult && (
   <AssessmentResults
-    result={assessmentResult}
-    onClose={() => {
-      setShowResults(false);
-      setAssessmentResult(null);
-    }}
-  />
+  result={assessmentResult}
+  evidence={requiredEvidence}
+  onClose={() => {
+    setShowResults(false);
+    setAssessmentResult(null);
+    setRequiredEvidence([]);
+  }}
+/>
 )}
     </>
   );

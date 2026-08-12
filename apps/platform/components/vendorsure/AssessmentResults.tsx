@@ -1,12 +1,15 @@
 import { AssessmentResult } from "@/lib/assessment/calculateRisk";
+import { EvidenceItem } from "@/lib/assessment/requiredEvidence";
 
 type Props = {
   result: AssessmentResult;
+  evidence: EvidenceItem[];
   onClose: () => void;
 };
 
 export default function AssessmentResults({
   result,
+  evidence,
   onClose,
 }: Props) {
   const badgeColor =
@@ -68,6 +71,29 @@ export default function AssessmentResults({
           )}
 
         </div>
+
+        <div className="mt-10">
+  <h3 className="text-xl font-semibold">
+    Required Evidence
+  </h3>
+
+  {evidence.length ? (
+    <ul className="mt-4 space-y-3">
+      {evidence.map((item) => (
+        <li
+          key={item.id}
+          className="rounded-lg border p-4"
+        >
+          ☐ {item.name}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p className="mt-4 text-gray-500">
+      No additional evidence required.
+    </p>
+  )}
+</div>
 
         <div className="mt-10 flex justify-end">
 
