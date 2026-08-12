@@ -1,12 +1,10 @@
 import Link from "next/link";
 
-import VendorProfileHeader from "@/components/vendorsure/VendorProfileHeader";
 import { vendors } from "@/lib/mock-data/vendors";
-import PrimaryContactCard from "@/components/vendorsure/PrimaryContactCard";
-import QualificationStatusCard from "@/components/vendorsure/QualificationStatusCard";
-import DocumentsCard from "@/components/vendorsure/DocumentsCard";
-import RequirementsMatrixCard from "@/components/vendorsure/RequirementsMatrixCard";
-import CapaCard from "@/components/vendorsure/CapaCard";
+import VendorWorkspace from "@/components/vendorsure/VendorWorkspace";
+
+
+
 type Props = {
   params: Promise<{
     id: string;
@@ -33,25 +31,17 @@ export default async function VendorDetailsPage({
   }
 
   return (
-    <div className="space-y-8 p-8">
+    <div className="mx-auto max-w-7xl space-y-8 p-8">
       <Link
-        href="/vendorsure"
-        className="text-blue-600 hover:underline"
-      >
-        ← Back to Vendor Management
-      </Link>
+       href="/vendorsure"
+       className="text-blue-600 hover:underline"
+>
+  ← Back to Vendor Management
+</Link>
 
-      <VendorProfileHeader vendor={vendor} />
 
-<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-  <PrimaryContactCard vendor={vendor} />
+      <VendorWorkspace vendor={vendor} />
 
-  <QualificationStatusCard vendor={vendor} />
-</div>
-
-<DocumentsCard vendor={vendor} />
-<RequirementsMatrixCard />
-<CapaCard vendor={vendor} />
     </div>
   );
 }

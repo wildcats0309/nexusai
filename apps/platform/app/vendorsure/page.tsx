@@ -5,12 +5,13 @@ import { useState } from "react";
 import DashboardHeader from "@/components/vendorsure/DashboardHeader";
 import StatCard from "@/components/vendorsure/StatCard";
 import VendorTable from "@/components/vendorsure/VendorTable";
-
+import AddVendorModal from "@/components/vendorsure/AddVendorModal";
+import EditVendorModal from "@/components/vendorsure/EditVendorModal";
 import { dashboardStats } from "@/lib/mock-data/dashboard";
 import { vendors } from "@/lib/mock-data/vendors";
-
-
-  type SortColumn =
+import { Vendor } from "@/lib/types/vendor";
+import VendorTabs from "@/components/vendorsure/VendorTabs";
+type SortColumn =
   | "name"
   | "customer"
   | "category"
@@ -20,28 +21,50 @@ import { vendors } from "@/lib/mock-data/vendors";
 
 export default function VendorSurePage() {
   // State
+  const [vendorList, setVendorList] = useState(vendors);
+  
+  const [showAddVendor, setShowAddVendor] = useState(false);
+  const [showEditVendor, setShowEditVendor] = useState(false);
+  
+  const [selectedVendor, setSelectedVendor] =
+  useState<Vendor | null>(null);
   const [search, setSearch] = useState("");
-const [currentPage, setCurrentPage] = useState(1);
-const handleSort = (column: SortColumn) => {
-  if (column === sortColumn) {
-    setSortDirection(
-      sortDirection === "asc" ? "desc" : "asc"
-    );
-  } else {
-    setSortColumn(column);
-    setSortDirection("asc");
-  }
-};
-const [sortColumn, setSortColumn] = useState<SortColumn>("name");
-const [sortDirection, setSortDirection] =
-  useState<"asc" | "desc">("asc");
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const [sortColumn, setSortColumn] =
+    useState<SortColumn>("name");
+
+  const [sortDirection, setSortDirection] =
+    useState<"asc" | "desc">("asc");
+
+  const handleSort = (column: SortColumn) => {
+    if (column === sortColumn) {
+      setSortDirection(
+        sortDirection === "asc" ? "desc" : "asc"
+      );
+    } else {
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+ const handleAddVendor = (newVendor: Vendor) => {
+  setVendorList((prevVendors) => [
+    ...prevVendors,
+    newVendor,
+  ]);
+};
+
+const handleEditVendor = (vendor: Vendor) => {
+  setSelectedVendor(vendor);
+  setShowEditVendor(true);
+};
 
   // Configuration
   const vendorsPerPage = 10;
 
   // Filter vendors
-  const filteredVendors = vendors.filter((vendor) => {
+  const filteredVendors = vendorList.filter((vendor) => {
     const term = search.trim().toLowerCase();
 
     return (
@@ -51,19 +74,26 @@ const [sortDirection, setSortDirection] =
     );
   });
 
+  // Sort vendors
   const sortedVendors = [...filteredVendors].sort((a, b) => {
-  const comparison = a[sortColumn].localeCompare(b[sortColumn]);
+    const comparison =
+      a[sortColumn].localeCompare(b[sortColumn]);
 
-  return sortDirection === "asc"
-    ? comparison
-    : -comparison;
-});
+    return sortDirection === "asc"
+      ? comparison
+      : -comparison;
+  });
 
   // Pagination
-  const startIndex = (currentPage - 1) * vendorsPerPage;
+  const startIndex =
+    (currentPage - 1) * vendorsPerPage;
+
   const endIndex = startIndex + vendorsPerPage;
 
-  const paginatedVendors = sortedVendors.slice(startIndex, endIndex);
+  const paginatedVendors = sortedVendors.slice(
+    startIndex,
+    endIndex
+  );
 
   const totalPages = Math.ceil(
     filteredVendors.length / vendorsPerPage
@@ -81,12 +111,13 @@ const [sortDirection, setSortDirection] =
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
-console.log("sortColumn:", sortColumn);
-console.log("sortDirection:", sortDirection);
+
 
   return (
     <div className="p-8">
-      <DashboardHeader />
+      <DashboardHeader
+  onAddVendor={() => setShowAddVendor(true)}
+/>
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         {dashboardStats.map((stat) => (
@@ -113,6 +144,7 @@ console.log("sortDirection:", sortDirection);
 
       <VendorTable
   vendors={paginatedVendors}
+  onEdit={handleEditVendor}
   onSort={handleSort}
   sortColumn={sortColumn}
   sortDirection={sortDirection}
@@ -139,6 +171,20 @@ console.log("sortDirection:", sortDirection);
           Next
         </button>
       </div>
+
+      <AddVendorModal
+  open={showAddVendor}
+  onClose={() => setShowAddVendor(false)}
+  onSave={handleAddVendor}
+/>
+
+<EditVendorModal
+  open={showEditVendor}
+  selectedVendor={selectedVendor}
+  onClose={() => setShowEditVendor(false)}
+  onSave={() => {}}
+/>
+
     </div>
   );
 }

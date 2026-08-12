@@ -21,6 +21,16 @@ type VendorTableProps = {
       | "lastReview"
   ) => void;
 
+  onEdit: (vendor: {
+  id: number;
+  name: string;
+  customer: string;
+  category: string;
+  risk: string;
+  status: string;
+  lastReview: string;
+}) => void;
+
   sortColumn:
     | "name"
     | "customer"
@@ -32,8 +42,11 @@ type VendorTableProps = {
   sortDirection: "asc" | "desc";
 };
 
+
+
 export default function VendorTable({
   vendors,
+  onEdit,
   onSort,
   sortColumn,
   sortDirection,
@@ -98,6 +111,11 @@ export default function VendorTable({
     >
       Last Review {sortColumn === "lastReview" && (sortDirection === "asc" ? "▲" : "▼")}
     </th>
+
+<th className="px-6 py-3 text-left text-sm font-semibold">
+  Actions
+</th>
+
   </tr>
 </thead>
 
@@ -121,7 +139,18 @@ export default function VendorTable({
                 <RiskBadge risk={vendor.risk} />
               </td>
               <td className="px-6 py-4">{vendor.status}</td>
-              <td className="px-6 py-4">{vendor.lastReview}</td>
+              <td className="px-6 py-4">
+  {vendor.lastReview}
+</td>
+
+<td className="px-6 py-4">
+  <button
+    onClick={() => onEdit(vendor)}
+    className="text-blue-600 hover:text-blue-800"
+  >
+    ✏️ Edit
+  </button>
+</td>
             </tr>
           ))}
         </tbody>
