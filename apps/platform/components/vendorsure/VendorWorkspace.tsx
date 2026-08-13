@@ -1,7 +1,9 @@
 "use client";
+
 import { getQualificationDecision } from "@/lib/assessment/getQualificationDecision";
 import { calculateRisk } from "@/lib/assessment/calculateRisk";
 import { getRequiredEvidence } from "@/lib/assessment/getRequiredEvidence";
+import { generateAssessmentSummary } from "@/lib/ai/generateAssessmentSummary";
 import AssessmentResults from "./AssessmentResults";
 import { useState } from "react";
 
@@ -26,6 +28,7 @@ export default function VendorWorkspace({
 }: Props) {
   const [showAssessment, setShowAssessment] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [assessmentResult, setAssessmentResult] = useState<
   ReturnType<typeof calculateRisk> | null
 >(null);
@@ -37,6 +40,10 @@ const [qualificationDecision, setQualificationDecision] =
   useState<ReturnType<
     typeof getQualificationDecision
   > | null>(null);
+  
+  const [assessmentSummary, setAssessmentSummary] =
+  useState("");
+
 
   return (
     <>
@@ -90,17 +97,22 @@ const [qualificationDecision, setQualificationDecision] =
   console.log("Assessment complete");
   console.log(answers);
 
- const result = calculateRisk(answers);
+const result = calculateRisk(answers);
 const evidence = getRequiredEvidence(answers);
 const decision = getQualificationDecision(
   result,
   evidence
 );
+const summary = generateAssessmentSummary(
+  result,
+  evidence,
+  decision
+);
 
 setAssessmentResult(result);
 setRequiredEvidence(evidence);
 setQualificationDecision(decision);
-
+setAssessmentSummary(summary);
 setShowAssessment(false);
 setShowResults(true);
 }}
@@ -111,6 +123,7 @@ setShowResults(true);
   result={assessmentResult}
   evidence={requiredEvidence}
   decision={qualificationDecision!}
+  summary={assessmentSummary}
   onClose={() => {
     setShowResults(false);
     setAssessmentResult(null);

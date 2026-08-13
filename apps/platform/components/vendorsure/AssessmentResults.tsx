@@ -1,3 +1,4 @@
+import StatusBadge from "./StatusBadge";
 import { AssessmentResult } from "@/lib/assessment/calculateRisk";
 import { EvidenceItem } from "@/lib/assessment/requiredEvidence";
 import { QualificationDecision } from "@/lib/assessment/getQualificationDecision";
@@ -6,6 +7,7 @@ type Props = {
   result: AssessmentResult;
   evidence: EvidenceItem[];
   decision: QualificationDecision;
+  summary: string;
   onClose: () => void;
 };
 
@@ -13,29 +15,28 @@ export default function AssessmentResults({
   result,
   evidence,
   decision,
+  summary,
   onClose,
 }: Props) {
-  const badgeColor =
-    result.riskLevel === "Low"
-      ? "bg-green-100 text-green-700"
-      : result.riskLevel === "Medium"
-      ? "bg-yellow-100 text-yellow-700"
-      : "bg-red-100 text-red-700";
-
-  const decisionColor =
-    decision.status === "Ready"
-      ? "bg-green-100 text-green-700"
-      : decision.status === "Needs Review"
-      ? "bg-yellow-100 text-yellow-700"
-      : "bg-red-100 text-red-700";
+  
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
 
         <h2 className="text-3xl font-bold">
-          Vendor Assessment Results
-        </h2>
+  Vendor Assessment Results
+</h2>
+
+<div className="mt-6 rounded-xl border bg-blue-50 p-5">
+  <h3 className="text-lg font-semibold text-blue-900">
+    AI Assessment Summary
+  </h3>
+
+  <p className="mt-3 whitespace-pre-line text-gray-700">
+    {summary}
+  </p>
+</div>
 
         {/* Overall Risk */}
 
@@ -51,11 +52,9 @@ export default function AssessmentResults({
             </p>
           </div>
 
-          <div
-            className={`rounded-full px-4 py-2 text-base font-semibold ${badgeColor}`}
-          >
-            {result.riskLevel} Risk
-          </div>
+          <StatusBadge
+  status={`${result.riskLevel} Risk`}
+/>
 
         </div>
 
@@ -106,13 +105,13 @@ export default function AssessmentResults({
                 >
                   <span>{item.name}</span>
 
-                  <span className="rounded-full bg-red-100 px-3 py-1 text-sm text-red-700">
-                    Missing
-                  </span>
-                </div>
+                  <StatusBadge status="Missing" />
+                  </div>
               ))}
 
-            </div>
+              </div>
+
+            
           ) : (
             <p className="mt-4 text-gray-500">
               No additional evidence required.
@@ -129,10 +128,12 @@ export default function AssessmentResults({
             Qualification Decision
           </h3>
 
-          <div
-            className={`mt-4 rounded-xl p-5 ${decisionColor}`}
-          >
-            <p className="text-2xl font-bold">
+          <div className="mt-4 rounded-xl border p-5">
+
+          <StatusBadge
+          status={decision.status}
+           />
+            <p className="mt-4text-2xl font-bold">
               {decision.status}
             </p>
 
@@ -173,16 +174,20 @@ export default function AssessmentResults({
 
         </div>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-between">
+  <button
+    className="rounded-lg border px-6 py-3 hover:bg-gray-50"
+  >
+    View Qualification Report
+  </button>
 
-          <button
-            onClick={onClose}
-            className="rounded-lg bg-blue-600 px-6 py-3 text-white hover:bg-blue-700"
-          >
-            Close
-          </button>
-
-        </div>
+  <button
+    onClick={onClose}
+    className="rounded-lg bg-blue-600 px-6 py-3 text-white hover:bg-blue-700"
+  >
+    Close
+  </button>
+</div>
 
       </div>
     </div>
