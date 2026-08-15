@@ -1,5 +1,6 @@
 "use client";
 
+import EvidenceWorkspace from "./EvidenceWorkspace";
 import { getQualificationDecision } from "@/lib/assessment/getQualificationDecision";
 import { calculateRisk } from "@/lib/assessment/calculateRisk";
 import { getRequiredEvidence } from "@/lib/assessment/getRequiredEvidence";
@@ -44,6 +45,10 @@ const [qualificationDecision, setQualificationDecision] =
   const [assessmentSummary, setAssessmentSummary] =
   useState("");
 
+  const [activeTab, setActiveTab] = useState<
+  "overview" | "documents" | "requirements" | "capas" | "activity" | "evidence"
+>("overview");
+
 
   return (
     <>
@@ -52,43 +57,56 @@ const [qualificationDecision, setQualificationDecision] =
   onRunAssessment={() => setShowAssessment(true)}
 />
 
-      <VendorTabs activeTab="overview" />
+      <VendorTabs
+  activeTab={activeTab}
+  onTabChange={setActiveTab}
+/>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <PrimaryContactCard vendor={vendor} />
-        <QualificationStatusCard vendor={vendor} />
-      </div>
+      {activeTab === "overview" && (
+  <>
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <PrimaryContactCard vendor={vendor} />
+      <QualificationStatusCard vendor={vendor} />
+    </div>
 
-      <DocumentsCard vendor={vendor} />
+    <DocumentsCard vendor={vendor} />
 
-      <RequirementsMatrixCard />
+    <RequirementsMatrixCard />
 
-      <CapaCard vendor={vendor} />
+    <CapaCard vendor={vendor} />
 
-      <ActivityTimeline
-        activities={[
-          {
-            date: "Today",
-            title: "Vendor Profile Updated",
-            description: "Vendor information was updated.",
-          },
-          {
-            date: "Aug 8",
-            title: "SOC 2 Certificate Uploaded",
-            description: "New compliance documentation received.",
-          },
-          {
-            date: "Aug 1",
-            title: "CAPA Created",
-            description: "Corrective action opened for supplier quality.",
-          },
-          {
-            date: "Jul 15",
-            title: "Vendor Approved",
-            description: "Vendor completed qualification process.",
-          },
-        ]}
-      />
+    <ActivityTimeline
+      activities={[
+        {
+          date: "Today",
+          title: "Vendor Profile Updated",
+          description: "Vendor information was updated.",
+        },
+        {
+          date: "Aug 8",
+          title: "SOC 2 Certificate Uploaded",
+          description: "New compliance documentation received.",
+        },
+        {
+          date: "Aug 1",
+          title: "CAPA Created",
+          description: "Corrective action opened for supplier quality.",
+        },
+        {
+          date: "Jul 15",
+          title: "Vendor Approved",
+          description: "Vendor completed qualification process.",
+        },
+      ]}
+    />
+  </>
+)}
+
+{activeTab === "evidence" && (
+  <EvidenceWorkspace
+    evidence={requiredEvidence}
+  />
+)}
 
      <AssessmentModal
   open={showAssessment}
@@ -99,6 +117,7 @@ const [qualificationDecision, setQualificationDecision] =
 
 const result = calculateRisk(answers);
 const evidence = getRequiredEvidence(answers);
+alert(`Evidence Count: ${evidence.length}`);
 const decision = getQualificationDecision(
   result,
   evidence
@@ -127,7 +146,7 @@ setShowResults(true);
   onClose={() => {
     setShowResults(false);
     setAssessmentResult(null);
-    setRequiredEvidence([]);
+    // setRequiredEvidence([]);
     setQualificationDecision(null);
   }}
 />

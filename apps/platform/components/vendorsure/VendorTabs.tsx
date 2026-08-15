@@ -1,10 +1,20 @@
 
+type Tab =
+  | "overview"
+  | "documents"
+  | "requirements"
+  | "capas"
+  | "activity"
+  | "evidence";
+
 type Props = {
-  activeTab: "overview" | "documents" | "requirements" | "capas" | "activity";
+  activeTab: Tab;
+  onTabChange: (tab: Tab) => void;
 };
 
 export default function VendorTabs({
   activeTab,
+  onTabChange,
 }: Props) {
   const tabs = [
     { id: "overview", label: "Overview" },
@@ -12,6 +22,7 @@ export default function VendorTabs({
     { id: "requirements", label: "Requirements" },
     { id: "capas", label: "CAPAs" },
     { id: "activity", label: "Activity" },
+    { id: "evidence", label: "Evidence" },
   ] as const;
 
   return (
@@ -20,6 +31,7 @@ export default function VendorTabs({
       {tabs.map((tab) => (
         <button
           key={tab.id}
+          onClick={() => onTabChange(tab.id)}
           className={`border-b-2 px-1 py-3 text-sm font-medium transition ${
             activeTab === tab.id
               ? "border-blue-600 text-blue-600"

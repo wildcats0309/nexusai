@@ -128,3 +128,40 @@
     @apply font-sans;
   }
 }
+
+/* ===========================
+   Print Styles
+=========================== */
+
+@media print {
+
+  nav,
+  aside,
+  header {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  main {
+    display: block !important;
+  }
+.flex-1 {
+  padding: 0 !important;
+}
+
+.rounded-xl {
+  border-radius: 0 !important;
+}
+
+.shadow-sm,
+.shadow-xl {
+  box-shadow: none !important;
+}
+
+.border {
+  border: none !important;
+}
+}
