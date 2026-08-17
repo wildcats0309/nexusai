@@ -1,3 +1,4 @@
+import AIAnalysisCard from "./AIAnalysisCard";
 import type { UploadedFile } from "@/lib/types/uploadedFile";
 import EvidenceCard from "./EvidenceCard";
 import EvidenceProgress from "./EvidenceProgress";
@@ -48,7 +49,13 @@ export default function EvidenceWorkspace({
       setUploadedFiles={setUploadedFiles}
     />
   ))}
+  
 </div>
+
+<div className="mt-8">
+  <AIAnalysisCard />
+</div>
+
     </div>
   );
 }
