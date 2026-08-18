@@ -20,7 +20,7 @@ export default function AIAnalysisCard() {
         <div className="rounded-xl border border-green-200 bg-green-50 p-4">
 
           <p className="text-xs font-semibold uppercase tracking-wide text-green-700">
-            Recommendation
+            Qualification Decision
           </p>
 
           <div className="mt-3 flex items-center gap-3">
@@ -31,11 +31,11 @@ export default function AIAnalysisCard() {
 
             <div>
               <h3 className="text-4xl font-bold text-green-700">
-                Approve Vendor
+                Recommend for Approve
               </h3>
 
               <p className="mt-1 text-lg text-green-600">
-                Evidence Requirement Satisfied
+                All required evidence has been verified.
               </p>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function AIAnalysisCard() {
         <div className="rounded-xl border p-6">
 
           <h3 className="text-lg font-semibold">
-            Why we recommend approval
+            Supporting Evidence
           </h3>
 
           <ul className="mt-5 space-y-4">
@@ -76,7 +76,7 @@ export default function AIAnalysisCard() {
               />
 
               <span className="text-gray-700">
-                Current SOC 2 Type II report detected.
+                SOC 2 Type II certification verified.
               </span>
             </li>
 
@@ -87,7 +87,7 @@ export default function AIAnalysisCard() {
               />
 
               <span className="text-gray-700">
-                Required security controls are present.
+                Required security controls meet qualification criteria.
               </span>
             </li>
 
@@ -98,7 +98,7 @@ export default function AIAnalysisCard() {
               />
 
               <span className="text-gray-700">
-                Document remains valid through May 14, 2027.
+                Certification is valid through May 14, 2027.
               </span>
             </li>
 
