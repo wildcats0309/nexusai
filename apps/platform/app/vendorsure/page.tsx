@@ -10,7 +10,6 @@ import EditVendorModal from "@/components/vendorsure/EditVendorModal";
 import { dashboardStats } from "@/lib/mock-data/dashboard";
 import { vendors } from "@/lib/mock-data/vendors";
 import { Vendor } from "@/lib/types/vendor";
-import VendorTabs from "@/components/vendorsure/VendorTabs";
 type SortColumn =
   | "name"
   | "customer"

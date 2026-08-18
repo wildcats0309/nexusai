@@ -34,6 +34,9 @@ export default function EditVendorModal({
     status: "Approved",
   });
 
+  // Synchronize the editable form when a new vendor is selected.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+
   useEffect(() => {
   if (selectedVendor) {
     setVendor({

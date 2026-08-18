@@ -38,6 +38,9 @@ export default function EvidenceCard({
     ? getDocumentHealth(uploadedFile.expirationDate)
     : "Unknown";
 
+  const hasDetectedDocument =
+       documentType !== "Unknown Document";
+
   return (
     <div className="rounded-xl border bg-white shadow-sm">
       <div className="flex items-start justify-between p-6">
@@ -54,7 +57,7 @@ export default function EvidenceCard({
           {uploadedFile && (
             <div className="mt-6 space-y-5">
 
-              {documentType !== "Unknown Document" && (
+              {hasDetectedDocument && (
                 <div>
                   <p className="text-xs uppercase tracking-wide text-gray-400">
                     Document Type
@@ -66,7 +69,7 @@ export default function EvidenceCard({
                 </div>
               )}
 
-              {documentType !== "Unknown Document" && (
+              {hasDetectedDocument && (
                 <div>
                   <p className="text-xs uppercase tracking-wide text-gray-400">
                     Document Health

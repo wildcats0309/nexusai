@@ -3,7 +3,7 @@ export type EvidenceItem = {
   name: string;
 };
 
-export const evidenceMap: Record<string, EvidenceItem[]> = {
+export const requiredEvidence: Record<string, EvidenceItem[]> = {
   "processes-phi": [
     {
       id: "baa",

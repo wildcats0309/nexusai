@@ -2,7 +2,7 @@ export type UploadedFile = {
   fileName: string;
   fileType: string;
   fileSize: number;
-  uploadedAt: string;
+  uploadedAt: string; // ISO 8601 date
 
   expirationDate?: string;
 

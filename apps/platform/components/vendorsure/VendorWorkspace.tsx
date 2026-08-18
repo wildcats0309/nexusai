@@ -29,7 +29,6 @@ export default function VendorWorkspace({
 }: Props) {
   const [showAssessment, setShowAssessment] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [showReport, setShowReport] = useState(false);
   const [assessmentResult, setAssessmentResult] = useState<
   ReturnType<typeof calculateRisk> | null
 >(null);
@@ -112,8 +111,6 @@ const [qualificationDecision, setQualificationDecision] =
   open={showAssessment}
   onClose={() => setShowAssessment(false)}
   onComplete={(answers) => {
-  console.log("Assessment complete");
-  console.log(answers);
 
 const result = calculateRisk(answers);
 const evidence = getRequiredEvidence(answers);

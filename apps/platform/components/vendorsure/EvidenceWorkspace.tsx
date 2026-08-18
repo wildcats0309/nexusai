@@ -3,7 +3,6 @@ import type { UploadedFile } from "@/lib/types/uploadedFile";
 import EvidenceCard from "./EvidenceCard";
 import EvidenceProgress from "./EvidenceProgress";
 import { useState } from "react";
-import StatusBadge from "./StatusBadge";
 import { EvidenceItem } from "@/lib/assessment/requiredEvidence";
 
 type Props = {

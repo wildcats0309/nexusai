@@ -1,4 +1,4 @@
-import { evidenceMap, EvidenceItem } from "./requiredEvidence";
+import { requiredEvidence, EvidenceItem } from "./requiredEvidence";
 
 export function getRequiredEvidence(
   answers: Record<string, string>
@@ -9,7 +9,7 @@ export function getRequiredEvidence(
     // Only require evidence for "yes" answers
     if (answerId !== "yes") continue;
 
-    const items = evidenceMap[questionId];
+    const items = requiredEvidence [questionId];
 
     if (!items) continue;
 
